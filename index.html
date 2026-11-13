@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révision - La demoiselle des Lumières</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .question-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        .option-btn.correct {
+            background-color: #dcfce7;
+            border-color: var(--success);
+            color: #166534;
+            font-weight: 600;
+        }
+
+        .option-btn.incorrect {
+            background-color: #fee2e2;
+            border-color: var(--error);
+            color: #991b1b;
+        }
+
+        .feedback {
+            margin-top: 12px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .score-container {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 30px;
+            padding: 20px;
+            background: #e0e7ff;
+            border-radius: 12px;
+            color: var(--primary);
+        }
+
+        button.reset-btn {
+            display: block;
+            margin: 20px auto 0 auto;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button.reset-btn:hover {
+            background-color: var(--primary-hover);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Quiz de Révision</h1>
+        <p class="subtitle">La demoiselle des Lumières – Fille de Voltaire (Annie Jay)</p>
+    </header>
+
+    <div id="quiz-container">
+        <!-- Les questions seront générées dynamiquement par JavaScript -->
+    </div>
+
+    <div id="score" class="score-container" style="display: none;"></div>
+    <button id="reset" class="reset-btn" style="display: none;" onclick="resetQuiz()">Recommencer le quiz</button>
+</div>
+
+<script>
+    const questions = [
+        {
+            question: "Quel est l'âge de Marie Corneille au début du roman ?",
+            options: ["15 ans", "17 ans", "20 ans", "18 ans"],
+            correct: 1,
+            explanation: "Marie Corneille a 17 ans et est issue d'une famille pauvre mais descendante du célèbre dramaturge Pierre Corneille."
+        },
+        {
+            question: "Quel célèbre philosophe prend Marie sous sa protection ?",
+            options: ["Jean-Jacques Rousseau", "Denis Diderot", "Voltaire", "Montesquieu"],
+            correct: 2,
+            explanation: "C'est Voltaire qui la prend sous sa protection à Ferney pour lui offrir une meilleure éducation."
+        },
+        {
+            question: "Quel événement historique majeur pousse Voltaire à s'engager pour la justice aux côtés de Marie ?",
+            options: ["L'affaire Calas", "La Révolution française", "L'affaire Dreyfus", "La censure de l'Encyclopédie"],
+            correct: 0,
+            explanation: "L'affaire Calas concerne une famille protestante victime d'une grave injustice suite à l'intolérance religieuse."
+        },
+        {
+            question: "Lequel de ces thèmes n'est PAS au cœur du roman ?",
+            options: ["L'importance de l'éducation", "La conquête spatiale", "La condition des femmes", "La dénonciation de l'intolérance religieuse"],
+            correct: 1,
+            explanation: "La conquête spatiale n'a aucun rapport avec le XVIIIe siècle ! Les thèmes principaux sont l'éducation, les Lumières, la justice et la condition des femmes."
+        },
+        {
+            question: "Quel est le comportement de Marie face aux leçons et aux réceptions de Voltaire au début ?",
+            options: ["Elle réussit tout brillamment et adore le théâtre tragique", "Elle préfère découvrir les choses à sa manière et n'aime pas trop les tragédies", "Elle refuse catégoriquement d'apprendre à lire", "Elle s'enfuit dès le premier jour"],
+            correct: 1,
+            explanation: "Marie n'aime pas particulièrement les tragédies et ne réussit pas toujours du premier coup, préférant découvrir les choses à sa manière."
+        }
+    ];
+
+    let score = 0;
+    let answeredCount = 0;
+
+    function loadQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        score = 0;
+        answeredCount = 0;
+        document.getElementById('score').style.display = 'none';
+        document.getElementById('reset').style.display = 'none';
+
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.innerText = `${index + 1}. ${q.question}`;
+            card.appendChild(title);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+
+            q.options.forEach((option, optIndex) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = option;
+                btn.onclick = () => selectOption(index, optIndex, btn, card, q);
+                optionsDiv.appendChild(btn);
+            });
+
+            card.appendChild(optionsDiv);
+
+            const feedback = document.createElement('div');
+            feedback.className = 'feedback';
+            feedback.id = `feedback-${index}`;
+            card.appendChild(feedback);
+
+            container.appendChild(card);
+        });
+    }
+
+    function selectOption(qIndex, optIndex, selectedBtn, card, q) {
+        const buttons = card.querySelectorAll('.option-btn');
+        buttons.forEach(b => b.disabled = true);
+
+        const feedback = document.getElementById(`feedback-${qIndex}`);
+
+        if (optIndex === q.correct) {
+            selectedBtn.classList.add('correct');
+            feedback.style.color = 'var(--success)';
+            feedback.innerText = `Correct ! ${q.explanation}`;
+            score++;
+        } else {
+            selectedBtn.classList.add('incorrect');
+            buttons[q.correct].classList.add('correct');
+            feedback.style.color = 'var(--error)';
+            feedback.innerText = `Incorrect. ${q.explanation}`;
+        }
+
+        answeredCount++;
+
+        if (answeredCount === questions.length) {
+            showScore();
+        }
+    }
+
+    function showScore() {
+        const scoreDiv = document.getElementById('score');
+        scoreDiv.style.display = 'block';
+        scoreDiv.innerText = `Votre score final est de ${score} / ${questions.length} !`;
+        document.getElementById('reset').style.display = 'block';
+    }
+
+    function resetQuiz() {
+        loadQuiz();
+    }
+
+    // Charger le quiz au démarrage
+    loadQuiz();
+</script>
+
+</body>
+</html>
