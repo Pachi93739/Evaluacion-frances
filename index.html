@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Révision - La demoiselle des Lumières</title>
+    <title>Révision Complète - La demoiselle des Lumières</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -12,8 +12,8 @@
             --card-bg: #ffffff;
             --text-color: #1e293b;
             --border-color: #e2e8f0;
-            --success: #22c55e;
-            --error: #ef4444;
+            --success: #16a34a;
+            --error: #dc2626;
         }
 
         body {
@@ -32,7 +32,7 @@
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         h1 {
@@ -43,6 +43,30 @@
         .subtitle {
             color: #64748b;
             font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background-color: #e2e8f0;
+            border-radius: 999px;
+            height: 10px;
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            background-color: var(--primary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 20px;
         }
 
         .card {
@@ -103,10 +127,10 @@
 
         .score-container {
             text-align: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
             margin-top: 30px;
-            padding: 20px;
+            padding: 24px;
             background: #e0e7ff;
             border-radius: 12px;
             color: var(--primary);
@@ -114,11 +138,11 @@
 
         button.reset-btn {
             display: block;
-            margin: 20px auto 0 auto;
+            margin: 20px auto 40px auto;
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-size: 1rem;
             border-radius: 8px;
             cursor: pointer;
@@ -134,13 +158,15 @@
 
 <div class="container">
     <header>
-        <h1>Quiz de Révision</h1>
+        <h1>Quiz de Révision Complet (12 questions)</h1>
         <p class="subtitle">La demoiselle des Lumières – Fille de Voltaire (Annie Jay)</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0 / 12 questions répondues</div>
     </header>
 
-    <div id="quiz-container">
-        <!-- Les questions seront générées dynamiquement par JavaScript -->
-    </div>
+    <div id="quiz-container"></div>
 
     <div id="score" class="score-container" style="display: none;"></div>
     <button id="reset" class="reset-btn" style="display: none;" onclick="resetQuiz()">Recommencer le quiz</button>
@@ -149,45 +175,94 @@
 <script>
     const questions = [
         {
+            question: "À quelle époque et dans quel pays se déroule l'histoire ?",
+            options: ["Au XVIIe siècle, en Angleterre", "Au XVIIIe siècle, en France", "Au XIXe siècle, en Suisse", "Au XVIe siècle, en France"],
+            correct: 1,
+            explanation: "L’histoire se déroule au XVIIIe siècle en France, à l’époque des Lumières."
+        },
+        {
             question: "Quel est l'âge de Marie Corneille au début du roman ?",
-            options: ["15 ans", "17 ans", "20 ans", "18 ans"],
+            options: ["15 ans", "17 ans", "19 ans", "16 ans"],
             correct: 1,
-            explanation: "Marie Corneille a 17 ans et est issue d'une famille pauvre mais descendante du célèbre dramaturge Pierre Corneille."
+            explanation: "Marie Corneille est une jeune fille pauvre de 17 ans."
         },
         {
-            question: "Quel célèbre philosophe prend Marie sous sa protection ?",
-            options: ["Jean-Jacques Rousseau", "Denis Diderot", "Voltaire", "Montesquieu"],
+            question: "Qui est Jean-François Corneille et que cherche-t-il à faire ?",
+            options: ["Le frère de Marie, qui veut devenir acteur", "Le père de Marie, qui veut profiter de leur lien avec Pierre Corneille pour obtenir de l'argent", "L'oncle de Marie, qui travaille pour le roi", "Le professeur de Marie à Ferney"],
+            correct: 1,
+            explanation: "Jean-François Corneille est le père de Marie et cherche à exploiter leur parenté avec le célèbre écrivain pour améliorer leur situation financière."
+        },
+        {
+            question: "Qui est Pierre Corneille par rapport à Marie ?",
+            options: ["Son grand-père paternel", "Son parrain", "Un célèbre dramaturge français, son ancêtre éloigné", "Un ami de Voltaire"],
             correct: 2,
-            explanation: "C'est Voltaire qui la prend sous sa protection à Ferney pour lui offrir une meilleure éducation."
+            explanation: "Pierre Corneille est un célèbre dramaturge français dont Marie est une descendante éloignée."
         },
         {
-            question: "Quel événement historique majeur pousse Voltaire à s'engager pour la justice aux côtés de Marie ?",
-            options: ["L'affaire Calas", "La Révolution française", "L'affaire Dreyfus", "La censure de l'Encyclopédie"],
-            correct: 0,
-            explanation: "L'affaire Calas concerne une famille protestante victime d'une grave injustice suite à l'intolérance religieuse."
-        },
-        {
-            question: "Lequel de ces thèmes n'est PAS au cœur du roman ?",
-            options: ["L'importance de l'éducation", "La conquête spatiale", "La condition des femmes", "La dénonciation de l'intolérance religieuse"],
+            question: "Quelles valeurs Voltaire enseigne-t-il principalement à Marie ?",
+            options: ["L'obéissance aveugle et la tradition", "La lecture, la réflexion, la raison et la liberté de penser", "L'art de la guerre et la politique", "La peinture et la musique classique"],
             correct: 1,
-            explanation: "La conquête spatiale n'a aucun rapport avec le XVIIIe siècle ! Les thèmes principaux sont l'éducation, les Lumières, la justice et la condition des femmes."
+            explanation: "Voltaire lui enseigne les valeurs des Lumières : la lecture, la réflexion, la raison et la liberté de penser."
         },
         {
-            question: "Quel est le comportement de Marie face aux leçons et aux réceptions de Voltaire au début ?",
-            options: ["Elle réussit tout brillamment et adore le théâtre tragique", "Elle préfère découvrir les choses à sa manière et n'aime pas trop les tragédies", "Elle refuse catégoriquement d'apprendre à lire", "Elle s'enfuit dès le premier jour"],
+            question: "Où vit Voltaire lorsqu'il accueille Marie et quelles activités y organise-t-il ?",
+            options: ["À Paris, où il organise des manifestations", "À Ferney, où il organise des réceptions, des bals et des représentations théâtrales", "À Versailles, où il donne des cours à la cour", "À Lyon, où il dirige une imprimerie"],
             correct: 1,
-            explanation: "Marie n'aime pas particulièrement les tragédies et ne réussit pas toujours du premier coup, préférant découvrir les choses à sa manière."
+            explanation: "Voltaire vit à Ferney et y organise des réceptions, des bals et des pièces de théâtre pour cultiver son entourage."
+        },
+        {
+            question: "Comment Marie réagit-elle face aux exercices et aux tragédies proposés par Voltaire ?",
+            options: ["Elle excelle immédiatement dans toutes les matières", "Elle n'aime pas particulièrement les tragédies et préfère découvrir les choses à sa manière", "Elle demande à retourner vivre chez son père", "Elle écrit sa propre tragédie dès la première semaine"],
+            correct: 1,
+            explanation: "Marie ne réussit pas toujours les exercices et n'aime pas trop les tragédies ; elle préfère apprendre à sa façon."
+        },
+        {
+            question: "Qui est Clarisse de Saint-Rémy ?",
+            options: ["La gouvernante de Voltaire à Ferney", "Une jeune fille que Marie rencontre au couvent", "La mère de Marie", "Une actrice célèbre de Paris"],
+            correct: 1,
+            explanation: "Clarisse de Saint-Rémy est une jeune fille que Marie rencontre au couvent."
+        },
+        {
+            question: "Quelles injustices sociales Marie découvre-t-elle au fil de l'histoire ?",
+            options: ["Que les artistes sont trop payés", "Que les femmes n'ont pas les mêmes possibilités que les hommes et que les pauvres ont moins de droits", "Que les nobles n'ont pas le droit de voyager", "Que les philosophes dirigent le pays"],
+            correct: 1,
+            explanation: "Elle prend conscience des inégalités entre les hommes et les femmes, ainsi qu'entre les riches et les pauvres."
+        },
+        {
+            question: "Qu'est-ce que l'affaire Calas ?",
+            options: ["Un vol de bijoux au château de Ferney", "Une famille protestante victime d'une grave injustice judiciaire liée à l'intolérance religieuse", "Un conflit entre Voltaire et Pierre Corneille", "Une révolte des paysans contre les impôts"],
+            correct: 1,
+            explanation: "L'affaire Calas concerne une famille protestante injustement condamnée à cause du fanatisme et de l'intolérance religieuse."
+        },
+        {
+            question: "Quel rôle Marie joue-t-elle dans l'affaire Calas ?",
+            options: ["Elle témoigne au tribunal de Paris", "Elle découvre l'histoire et encourage Voltaire à intervenir pour défendre cette famille", "Elle cache la famille Calas à Ferney", "Elle écrit un livre sous un faux nom"],
+            correct: 1,
+            explanation: "C'est Marie qui découvre cette injustice et encourage Voltaire à mener un combat pour faire éclater la vérité."
+        },
+        {
+            question: "Quel est le message principal du roman d'Annie Jay ?",
+            options: ["Qu'il faut toujours obéir aux personnes plus âgées", "Qu'il faut réfléchir par soi-même, défendre la vérité et ne pas accepter les injustices", "Que la richesse est le seul moyen d'être heureux", "Que le théâtre est plus important que la justice"],
+            correct: 1,
+            explanation: "Le message central est l'importance de l'éducation, de l'esprit critique, de la tolérance et de la lutte contre l'injustice."
         }
     ];
 
     let score = 0;
     let answeredCount = 0;
 
+    function updateProgress() {
+        const percentage = (answeredCount / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = `${percentage}%`;
+        document.getElementById('progress-text').innerText = `${answeredCount} / ${questions.length} questions répondues`;
+    }
+
     function loadQuiz() {
         const container = document.getElementById('quiz-container');
         container.innerHTML = '';
         score = 0;
         answeredCount = 0;
+        updateProgress();
         document.getElementById('score').style.display = 'none';
         document.getElementById('reset').style.display = 'none';
 
@@ -231,16 +306,17 @@
         if (optIndex === q.correct) {
             selectedBtn.classList.add('correct');
             feedback.style.color = 'var(--success)';
-            feedback.innerText = `Correct ! ${q.explanation}`;
+            feedback.innerText = `✓ Correct ! ${q.explanation}`;
             score++;
         } else {
             selectedBtn.classList.add('incorrect');
             buttons[q.correct].classList.add('correct');
             feedback.style.color = 'var(--error)';
-            feedback.innerText = `Incorrect. ${q.explanation}`;
+            feedback.innerText = `✗ Incorrect. ${q.explanation}`;
         }
 
         answeredCount++;
+        updateProgress();
 
         if (answeredCount === questions.length) {
             showScore();
@@ -250,15 +326,16 @@
     function showScore() {
         const scoreDiv = document.getElementById('score');
         scoreDiv.style.display = 'block';
-        scoreDiv.innerText = `Votre score final est de ${score} / ${questions.length} !`;
+        let message = score >= 10 ? "Excellent travail !" : score >= 7 ? "Bon travail, continue comme ça !" : "Relis bien le résumé et réessaie !";
+        scoreDiv.innerText = `Score final : ${score} / ${questions.length} — ${message}`;
         document.getElementById('reset').style.display = 'block';
     }
 
     function resetQuiz() {
         loadQuiz();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Charger le quiz au démarrage
     loadQuiz();
 </script>
 
